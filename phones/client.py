@@ -3,8 +3,10 @@ import time
 import requests
 import os
 import sys
+from zipfile import ZipFile
 
-SERVER_ENDPOINT = "http://192.168.1.30:5000"
+SERVER_ENDPOINT = "http://localhost:5000"
+#SERVER_ENDPOINT = "http://192.168.1.30:5000"
 STATUS_FAILED = 2
 STATUS_SUCCEDED = 3
 
@@ -36,8 +38,11 @@ def task_submission(data):
     print('Working on job id={}: '.format(job_id))
     print(data['job'])
 
-    # process the task from git repo
-    process_git_task(data['job']['code_url'])
+    if data['job']['code_url'] != '':
+        # process the task from git repo
+        process_git_task(data['job']['code_url'])
+    else:
+        process_zip_task(data['job']['code_bytes'])
 
     result = ""
     with open("./output", "r") as f:
@@ -69,5 +74,23 @@ def process_git_task(url):
     # remove the git repo
     os.system('rm -rf {}'.format(directory))
 
+def process_zip_task(contents):
+    owd = os.getcwd()
+    print('Received :')
+    print(contents)
+    zipObj = ZipFile('temp.zip', 'w')
+    # Add multiple files to the zip
+    for obj in contents:
+        fn = obj['filename']
+        byts = obj['bytes']
+        zipObj.writestr(fn,byts)
+    zipObj.extractall(path='temp')
+    os.system('rm temp.zip')    
+    os.chdir(owd+'/temp/main')
+    os.system('chmod u+x main.sh')
+    os.system('./main.sh > ../../output')
+    os.system('echo $? > ../../status')
+    os.chdir(owd)
+    os.system('rm -rf temp')
 sio.connect(f"{SERVER_ENDPOINT}/?device_id={device_id}")
 sio.wait()

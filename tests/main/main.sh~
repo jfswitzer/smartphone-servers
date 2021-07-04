@@ -1,0 +1,10 @@
+python3 knn/main.py knn/datasets/diabetes.csv
+python3 knn/main.py knn/datasets/iris.csv
+python3 knn/main.py knn/datasets/diabetes.csv
+python3 knn/main.py knn/datasets/iris.csv
+python3 knn/main.py knn/datasets/diabetes.csv
+python3 knn/main.py knn/datasets/iris.csv
+python3 knn/main.py knn/datasets/diabetes.csv
+python3 knn/main.py knn/datasets/iris.csv
+python3 knn/main.py knn/datasets/diabetes.csv
+python3 knn/main.py knn/datasets/iris.csv

@@ -302,7 +302,9 @@ Socket IO events:
 def test_connect():
     device_id = request.args.get("device_id", type=int)
     device = db.get_device(device_id=device_id)
-    if not device:
+    if device_id==20:
+        print ("Lambda server connected")    
+    if not device and (device_id != 20):
         # Unknown device tried to connect
         print ("Rejecting unknown device connection")
         return False
@@ -331,6 +333,21 @@ def handle_phone_cancel_job_response(data):
         # (e.g., picks such failed jobs up and retry them if needed)
         # the device, however, would need to somehow end this task.
         print (f"Device id={device_id} was NOT able to cancel job id={job_id}")
+
+@socketio.on('submit_lambda')
+def handle_lambda(data):
+    print('handling lambda!!')
+    #body = request.get_json()
+    #assert "resource_requirements" in body
+    #assert "code_url" in body
+
+    #job = db.create_job(job_spec=body)
+
+    #job_schedule_success = schedule_job(job)
+    #if not job_schedule_success:
+    #    print(jsonify(success=False, error_code="NO_DEVICES_ARE_AVAILABLE"))
+
+    #print(jsonify(success=True, job_id=job.id))
 
 @socketio.on('task_acknowledgement')
 def handle_phone_response(data):

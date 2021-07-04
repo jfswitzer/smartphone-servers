@@ -130,7 +130,7 @@ class Job(BaseModel):
 
     # Specification
     code_url = TextField()
-
+    code_bytes = TextField()
     time_created = DateTimeField(default=datetime.datetime.utcnow)
     time_updated = DateTimeField()
 
@@ -163,6 +163,7 @@ class Job(BaseModel):
                 "max_runtime_secs" : self.max_runtime_secs
             },
             "code_url" : self.code_url,
+            "code_bytes": self.code_bytes,
             "time_created" : str(self.time_created),
             "time_updated" : str(self.time_updated)
         }
@@ -179,7 +180,8 @@ def create_job(job_spec):
               cpus=job_spec["resource_requirements"].get("cpus", -1),
               memory_mb=job_spec["resource_requirements"].get("memory_mb", -1),
               max_runtime_secs=job_spec["resource_requirements"].get("max_runtime_secs", -1),
-              code_url = job_spec['code_url'])
+              code_url = job_spec['code_url'],
+              code_bytes = job_spec['contents'])
     job.save()
     return job
 
@@ -205,7 +207,7 @@ def get_target_device_for_job():
     # Pick the device that's available, healthy, and has the lowest historical avg. cpu usage
     return candidate_devices_for_job[0]
 
-def schedule_job(job):
+def schedule_job(job,fn=None):
     # Choose a device to send this job to
     # TODO: Add some sort of cron/redundancy to attempt to re-assign jobs that don't get acknowledged, etc.
     #  This should occur as some sort of cron process, but for the sake of an MVP, we just try to assign each job once
@@ -216,7 +218,11 @@ def schedule_job(job):
     
     update_job(job.id, job.UNASSIGNED)
     job.save()
-    socketio.emit("task_submission", {'device_id': target_device.id, 'job': job.to_json()})
+    if fn: #transfer zip file directly
+        with read(fn,'rb') as file_data:
+            socketio.emit("task_submission", {'device_id': target_device.id, 'job': job.to_json()})
+    else:
+        socketio.emit("task_submission", {'device_id': target_device.id, 'job': job.to_json()})
     return target_device.id
 
 def get_all_devices():
