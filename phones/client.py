@@ -87,9 +87,11 @@ def process_zip_task(contents):
     zipObj.extractall(path='temp')
     os.system('rm temp.zip')    
     os.chdir(owd+'/temp/main')
+    os.system('mkdir output_tmp')
     os.system('chmod u+x main.sh')
     os.system('./main.sh > ../../output')
     os.system('echo $? > ../../status')
+    os.system(f'mv output_tmp {owd}') #hmm what happens if no output folder, need to zip
     os.chdir(owd)
     os.system('rm -rf temp')
 sio.connect(f"{SERVER_ENDPOINT}/?device_id={device_id}")
