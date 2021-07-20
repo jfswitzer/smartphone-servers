@@ -109,10 +109,11 @@ def get_neighbors(train, test_row, num_neighbors):
  
 # Make a prediction with neighbors
 def predict_classification(train, test_row, num_neighbors):
-	neighbors = get_neighbors(train, test_row, num_neighbors)
-	output_values = [row[-1] for row in neighbors]
-	prediction = max(set(output_values), key=output_values.count)
-	return prediction
+        neighbors = get_neighbors(train, test_row, num_neighbors)
+        print(neighbors)
+        output_values = [row[-1] for row in neighbors]
+        prediction = max(set(output_values), key=output_values.count)
+        return prediction
  
 # kNN Algorithm
 def k_nearest_neighbors(train, test, num_neighbors):

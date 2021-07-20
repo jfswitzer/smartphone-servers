@@ -27,9 +27,10 @@ import time
 # 3. if job repeatedly fails, then stop it after 3 retries
 # 4. if phone does not acknowledge task, increment its failed acks num
 
-MAX_FAILS = 100
-CHECK_JOBS_INTERVAL_SEC = 5
-ACK_TIMEOUT = 10
+MAX_FAILS = 100 #max fails is for full decomissioning
+CHECK_JOBS_INTERVAL_SEC = 1 #check for timed out jobs every 1s
+ACK_TIMEOUT = 3 #no ack for 3s, time out 
+HEARTBEAT_TIMEOUT = 2 # no heartbeat for 1.5s, time out
 class Checker:
 
     def __init__(self):
@@ -114,10 +115,11 @@ class Checker:
                     device.stop_charging()
                     device.decommission()
                     print(f"[DEVICE {device.id}] DECOMMISSIONED.")
+                # if (datetime.utcnow() - device.last_heartbeat) > datetime.timedelta(seconds=1):
+                #     print(f"[DEVICE {device.id}] INACTIVE.")
+                #     device.inactive()
 
-            # Start another thread in a min
-            # threading.Timer(db.HEARTBEAT_ACTIVE_RANGE_MINUTES * 60, self.check_phones).start()
-            time.sleep(db.HEARTBEAT_ACTIVE_RANGE_MINUTES * 60)
+            time.sleep(1)
 
 
     def stop(self):

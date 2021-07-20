@@ -10,7 +10,7 @@ except ImportError:
 db = SqliteDatabase('database.db')
 
 # number of minutes in between heart beats that still considers the device is alive and healthy
-HEARTBEAT_ACTIVE_RANGE_MINUTES = 1
+HEARTBEAT_ACTIVE_RANGE_SECONDS = 1.5
 METADATA_HISTORY_SIZE = 5
 MAX_JOB_ATTEMPTS = 5
 
@@ -42,7 +42,7 @@ class Device(BaseModel):
     def is_active(self):
         if not self.last_heartbeat:
             return False
-        return datetime.datetime.utcnow() - self.last_heartbeat <= datetime.timedelta(minutes=HEARTBEAT_ACTIVE_RANGE_MINUTES)
+        return datetime.datetime.utcnow() - self.last_heartbeat <= datetime.timedelta(seconds=HEARTBEAT_ACTIVE_RANGE_SECONDS)
 
     def update_metadata_history(self):
         metadata_history = self.metadata_history or []

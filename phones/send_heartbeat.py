@@ -4,7 +4,7 @@ import threading
 import util
 import sys
 
-HEARTBEAT_INTERVAL_SECS = 5
+HEARTBEAT_INTERVAL_SECS = 0.33
 SERVER_ENDPOINT = "http://localhost:5000"
 #SERVER_ENDPOINT = "http://192.168.1.30:5000"
 
