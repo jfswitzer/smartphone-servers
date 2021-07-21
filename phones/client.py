@@ -6,8 +6,8 @@ import sys
 import json
 from zipfile import ZipFile
 
-SERVER_ENDPOINT = "http://localhost:5000"
-#SERVER_ENDPOINT = "http://192.168.1.30:5000"
+#SERVER_ENDPOINT = "http://localhost:5000"
+SERVER_ENDPOINT = "http://192.168.1.86:5000"
 STATUS_FAILED = 2
 STATUS_SUCCEDED = 3
 
@@ -77,24 +77,20 @@ def process_git_task(url):
 
 def process_zip_task(contents):
     owd = os.getcwd()
-    print('Received :')
-    print(contents)
-    print('With len : ')
-    print(len(contents))
     zipObj = ZipFile('temp.zip', 'w')
     for obj in contents:
         fn = obj['filename']
         byts = obj['bytes']
         zipObj.writestr(fn,byts)
     zipObj.extractall(path='temp')
-    #os.system('rm temp.zip')    
-    #os.chdir(owd+'/temp/main')
-    #os.system('mkdir output_tmp')
-    #os.system('chmod u+x main.sh')
-    #os.system('./main.sh > ../../output')
-    #os.system('echo $? > ../../status')
-    #os.system(f'mv output_tmp {owd}') #hmm what happens if no output folder, need to zip
-    #os.chdir(owd)
-    #os.system('rm -rf temp')
+    os.system('rm temp.zip')    
+    os.chdir(owd+'/temp/main')
+    os.system('mkdir output_tmp')
+    os.system('chmod u+x main.sh')
+    os.system('./main.sh > ../../output')
+    os.system('echo $? > ../../status')
+    os.system(f'mv output_tmp {owd}') #hmm what happens if no output folder, need to zip
+    os.chdir(owd)
+    os.system('rm -rf temp')
 sio.connect(f"{SERVER_ENDPOINT}/?device_id={device_id}")
 sio.wait()
