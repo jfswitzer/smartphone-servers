@@ -28,7 +28,7 @@ import time
 # 4. if phone does not acknowledge task, increment its failed acks num
 
 MAX_FAILS = 100 #max fails is for full decomissioning
-CHECK_JOBS_INTERVAL_SEC = 1 #check for timed out jobs every 1s
+CHECK_JOBS_INTERVAL_SEC = 0.1 #check for timed out jobs every 1s
 ACK_TIMEOUT = 3 #no ack for 3s, time out 
 HEARTBEAT_TIMEOUT = 2 # no heartbeat for 1.5s, time out
 class Checker:
@@ -206,12 +206,12 @@ def device_heartbeat(device_id):
 
     # TODO: need to add charging logic based on phone's battery level on heartbeat
     # possibly something like phone.metadata.charge < 20 -> phone.start_charging() ...
-    if device.needs_to_start_charging() and not device.decommissioned:
-        device.start_charging()
-    elif device.needs_to_stop_charging() and not device.decommissioned:
-        device.stop_charging()
-    elif device.decommissioned: # if the device is behaving badly, stop charging it.
-        device.stop_charging() 
+    #if device.needs_to_start_charging() and not device.decommissioned:
+    #    device.start_charging()
+    #elif device.needs_to_stop_charging() and not device.decommissioned:
+    #    device.stop_charging()
+    #elif device.decommissioned: # if the device is behaving badly, stop charging it.
+    #    device.stop_charging() 
 
     return jsonify(success=True)
 
