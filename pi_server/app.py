@@ -28,9 +28,8 @@ import time
 # 4. if phone does not acknowledge task, increment its failed acks num
 
 MAX_FAILS = 100 #max fails is for full decomissioning
-CHECK_JOBS_INTERVAL_SEC = 0.1 #check for timed out jobs every 1s
+CHECK_JOBS_INTERVAL_SEC = 0.1 #check for timed out jobs every 0.1s
 ACK_TIMEOUT = 3 #no ack for 3s, time out 
-HEARTBEAT_TIMEOUT = 2 # no heartbeat for 1.5s, time out
 class Checker:
 
     def __init__(self):
@@ -42,7 +41,7 @@ class Checker:
             # stops recursively generating threads.
             return
         while not self.stopped:
-            print("[CHECKING JOBS]")
+            #print("[CHECKING JOBS]")
             jobs = db.get_all_jobs()
 
             # ==== for each job ====
@@ -105,7 +104,7 @@ class Checker:
             return
 
         while not self.stopped:
-            print("[CHECKING PHONES]")
+            #print("[CHECKING PHONES]")
 
             # ==== Check devices' num failed counts ====
             for device in db.get_all_devices():
@@ -115,10 +114,6 @@ class Checker:
                     device.stop_charging()
                     device.decommission()
                     print(f"[DEVICE {device.id}] DECOMMISSIONED.")
-                # if (datetime.utcnow() - device.last_heartbeat) > datetime.timedelta(seconds=1):
-                #     print(f"[DEVICE {device.id}] INACTIVE.")
-                #     device.inactive()
-
             time.sleep(1)
 
 
@@ -335,21 +330,6 @@ def handle_phone_cancel_job_response(data):
         # (e.g., picks such failed jobs up and retry them if needed)
         # the device, however, would need to somehow end this task.
         print (f"Device id={device_id} was NOT able to cancel job id={job_id}")
-
-@socketio.on('submit_lambda')
-def handle_lambda(data):
-    print('handling lambda!!')
-    #body = request.get_json()
-    #assert "resource_requirements" in body
-    #assert "code_url" in body
-
-    #job = db.create_job(job_spec=body)
-
-    #job_schedule_success = schedule_job(job)
-    #if not job_schedule_success:
-    #    print(jsonify(success=False, error_code="NO_DEVICES_ARE_AVAILABLE"))
-
-    #print(jsonify(success=True, job_id=job.id))
 
 @socketio.on('task_acknowledgement')
 def handle_phone_response(data):
