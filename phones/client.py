@@ -49,7 +49,7 @@ def task_submission(data):
     with open("./output", "r") as f:
         result += f.readline()
     
-    time.sleep(5)
+    #time.sleep(5)
 
     status = 0
     with open("./status", "r") as f:

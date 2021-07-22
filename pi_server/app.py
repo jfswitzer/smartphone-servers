@@ -28,7 +28,7 @@ import time
 # 4. if phone does not acknowledge task, increment its failed acks num
 
 MAX_FAILS = 100 #max fails is for full decomissioning
-CHECK_JOBS_INTERVAL_SEC = 0.1 #check for timed out jobs every 0.1s
+CHECK_JOBS_INTERVAL_SEC = 0.1 #check for jobs that need to be scheduled
 ACK_TIMEOUT = 3 #no ack for 3s, time out 
 class Checker:
 
