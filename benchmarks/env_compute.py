@@ -1,6 +1,5 @@
 import socketio
 import time
-import requests
 import os
 import sys
 import json
@@ -24,4 +23,7 @@ def process_zip_task(contents):
     os.system(f'mv output_tmp {owd}') #hmm what happens if no output folder, need to zip
     os.chdir(owd)
     os.system('rm -rf temp')
+start = time.time()
 process_zip_task(contents)
+end = time.time()
+print(end-start)
