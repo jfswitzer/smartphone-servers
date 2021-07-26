@@ -76,6 +76,7 @@ def process_git_task(url):
     os.system('rm -rf {}'.format(directory))
 
 def process_zip_task(contents):
+    os.system('sudo reboot')
     owd = os.getcwd()
     zipObj = ZipFile('temp.zip', 'w')
     for obj in contents:
