@@ -30,7 +30,7 @@ FONTSIZE=12
 
 P = 43.31+7
 def gwp(y,e):
-    return (P+1.92*8.760*y*e)/(3+y)
+    return (P+2.5*8.760*y*e)/(3+y)
 yr = np.linspace(0,5,1000)
 
 gwp_solar = [gwp(y,0.048) for y in yr]
