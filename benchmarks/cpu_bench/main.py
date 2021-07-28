@@ -1,4 +1,8 @@
 import sys
+import time
+import logging
+logging.basicConfig(filename="cpu_log.csv",format='%(levelname)s,%(message)s', level=logging.DEBUG)
+
 def fibonacci(n):
     if n < 1:
         print('err')
@@ -7,4 +11,8 @@ def fibonacci(n):
         return 1
     return fibonacci(n-1)+fibonacci(n-2)
 for _ in range(int(sys.argv[1])):
+    st = time.time()
     fibonacci(30)
+    e = time.time()
+    diff = e-st
+    logging.info(str(diff))
